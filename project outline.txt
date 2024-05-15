@@ -1,0 +1,246 @@
+Project Outline: Automated Torrent Management and Plex Updater
+1. Project Overview
+
+Objective: Automate the process of downloading torrents, organizing files, renaming them appropriately, and updating your Plex library.
+
+Goals:
+
+    Automate torrent downloading based on specific criteria.
+    Automatically organize and rename files.
+    Update Plex server with new content.
+    Track episodes and monitor for new releases.
+    Learn web scraping, API interaction, file handling, and some basic database management.
+
+2. Project Requirements
+
+Technologies and Libraries:
+
+    Python: Main programming language.
+    Requests: For making HTTP requests.
+    BeautifulSoup: For web scraping.
+    Transmission RPC: For interacting with the Transmission torrent client.
+    FileBot CLI: For renaming and organizing files.
+    PlexAPI: For interacting with the Plex server.
+    SQLite: For simple database management to track episodes.
+    Cron Jobs / Task Scheduler: For scheduling periodic tasks.
+
+Skills to Learn:
+
+    Web scraping with BeautifulSoup.
+    Making HTTP requests with Requests.
+    Interacting with torrent clients using RPC.
+    File handling and automation in Python.
+    Basic database operations with SQLite.
+    Using Plex API for server updates.
+
+3. Project Steps
+
+DONE-Step 1: Set Up Project Environment
+
+    Create a virtual environment for the project.
+    Install necessary libraries (requests, beautifulsoup4, transmission-rpc, plexapi, sqlite3).
+
+TODO:
+Step 2: Web Scraping for Torrent Links
+
+    Learn to use BeautifulSoup to scrape the website for torrent links.
+    Filter links based on quality criteria.
+    Store the links and metadata (e.g., name, category) in an SQLite database.
+
+Step 3: Automate Torrent Downloads
+
+    Use the Transmission RPC library to add torrents from magnet links.
+    Monitor and sort downloads based on predefined categories.
+    Implement error handling and logging.
+
+Step 4: File Handling and Renaming
+
+    Use FileBot CLI to rename and organize downloaded files.
+    Learn to call external commands from Python and handle file operations.
+    Ensure files are moved to the correct directories monitored by Plex.
+
+Step 5: Update Plex Library
+
+    Use PlexAPI to refresh Plex library and ensure new content is indexed.
+    Implement functionality to notify you of newly available content.
+
+Step 6: Implement Tracking System
+
+    Use SQLite to keep track of downloaded episodes.
+    Develop a simple interface to check the status of episodes and what’s new.
+
+Step 7: Schedule Regular Checks
+
+    Use cron jobs (Linux/Mac) or Task Scheduler (Windows) to automate the script execution.
+    Ensure the script runs at regular intervals to check for new episodes and handle downloads.
+
+Step 8: Security and Best Practices
+
+    Learn basic security practices for web scraping and interacting with external APIs.
+    Securely store API keys and sensitive information.
+    Implement logging and error handling to monitor the script’s performance.
+
+Step 9: GitHub Repository Setup
+
+    Create a new GitHub repository for the project.
+    Write a comprehensive README file explaining the project, setup instructions, and usage.
+    Commit code regularly with meaningful messages.
+    Include documentation and examples to showcase your work.
+
+4. Detailed Steps and Learning Resources
+
+Step 1: Set Up Project Environment
+
+sh
+
+# Create a virtual environment
+python3 -m venv torrent_manager_env
+source torrent_manager_env/bin/activate  # On Windows use `torrent_manager_env\Scripts\activate`
+
+# Install necessary libraries
+pip install requests beautifulsoup4 transmission-rpc plexapi sqlite3
+
+Step 2: Web Scraping for Torrent Links
+
+    Learn Web Scraping:
+        BeautifulSoup Documentation
+        Web Scraping with Python - Tutorial
+
+Example Code:
+
+python
+
+import requests
+from bs4 import BeautifulSoup
+import sqlite3
+
+# Fetch webpage
+response = requests.get('http://example.com/torrents')
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# Parse and store links
+torrents = soup.find_all('a', href=True)
+for torrent in torrents:
+    link = torrent['href']
+    name = torrent.text
+    # Store in SQLite database
+    conn = sqlite3.connect('torrents.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO torrents (name, link) VALUES (?, ?)', (name, link))
+    conn.commit()
+    conn.close()
+
+Step 3: Automate Torrent Downloads
+
+    Learn Transmission RPC:
+        Transmission RPC Documentation
+
+Example Code:
+
+python
+
+import transmissionrpc
+
+client = transmissionrpc.Client('localhost', port=9091)
+magnet_link = 'magnet:?xt=urn:btih:...'
+client.add_torrent(magnet_link)
+
+Step 4: File Handling and Renaming
+
+    Learn to Use FileBot CLI:
+        FileBot CLI Documentation
+
+Example Command:
+
+sh
+
+filebot -rename /path/to/files --db TheMovieDB --format "{n} - {s00e00} - {t}"
+
+Step 5: Update Plex Library
+
+    Learn PlexAPI:
+        PlexAPI Documentation
+
+Example Code:
+
+python
+
+from plexapi.server import PlexServer
+
+baseurl = 'http://localhost:32400'
+token = 'YOUR_PLEX_TOKEN'
+plex = PlexServer(baseurl, token)
+plex.library.update()
+
+Step 6: Implement Tracking System
+
+    Learn SQLite with Python:
+        SQLite3 Documentation
+        SQLite with Python - Tutorial
+
+Step 7: Schedule Regular Checks
+
+    Set Up Cron Jobs:
+        Cron Jobs Tutorial
+
+Example Cron Job:
+
+sh
+
+0 * * * * /path/to/your/script.py
+
+Step 8: Security and Best Practices
+
+    Learn Security Basics:
+        OWASP Web Security
+        Ensure API keys and sensitive information are stored securely.
+
+Step 9: GitHub Repository Setup
+
+    Create a GitHub Repository:
+        Creating a Repository
+
+Example README Content:
+
+markdown
+
+# Torrent Management and Plex Updater
+
+## Description
+This project automates the process of downloading torrents, organizing files, renaming them appropriately, and updating your Plex library.
+
+## Features
+- Automated torrent downloads based on specific criteria
+- File organization and renaming
+- Plex library updates
+- Episode tracking and monitoring
+
+## Installation
+1. Clone the repository
+2. Create a virtual environment and install dependencies:
+    ```sh
+    python3 -m venv env
+    source env/bin/activate
+    pip install -r requirements.txt
+    ```
+
+## Usage
+1. Configure the script with your settings.
+2. Run the script:
+    ```sh
+    python script.py
+    ```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
+
+Conclusion
+
+By following this project outline, you'll learn a range of skills from web scraping and API interactions to file handling and database management. This will not only help automate your current workflow but also enhance your GitHub profile with a comprehensive and well-documented project.
+Follow-Up Questions
+
+    What specific challenges do you anticipate in automating your torrent management process, and how can you address them?
+    How can the skills learned from this project be applied to other areas of your personal or professional life?
