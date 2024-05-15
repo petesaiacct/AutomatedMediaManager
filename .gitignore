@@ -1,6 +1,9 @@
 # Ignore virtual environment
 venv/
 
+# Ignore project outline
+project outline.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -128,3 +131,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# VS Code settings
+.vscode/
